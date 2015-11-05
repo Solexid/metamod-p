@@ -113,7 +113,7 @@ inline void DLLINTERNAL reset_dlsym_hook(void)
 //
 // Replacement dlsym function
 //
-static void * __replacement_dlsym(void * module, const char * funcname)
+/*static void * __replacement_dlsym(void * module, const char * funcname)
 {
 	//these are needed in case dlsym calls dlsym, default one doesn't do
 	//it but some LD_PRELOADed library that hooks dlsym might actually
@@ -180,6 +180,19 @@ static void * __replacement_dlsym(void * module, const char * funcname)
 	pthread_mutex_unlock(&mutex_replacement_dlsym);
 	
 	return(func);
+}*/
+
+extern "C" void *dlsym_metamod( void *module, const char *funcname)
+{	
+	//dlsym on metamod module
+	void * func = DLSYM(module, funcname);
+	
+	if(!func)
+	{
+		//function not in metamod module, try gamedll
+		func = DLSYM(gamedll_module_handle, funcname);
+	}
+	return func;
 }
 
 //
@@ -187,9 +200,10 @@ static void * __replacement_dlsym(void * module, const char * funcname)
 //
 int DLLINTERNAL init_linkent_replacement(DLHANDLE MetamodHandle, DLHANDLE GameDllHandle)
 {
+	
 	metamod_module_handle = MetamodHandle;
 	gamedll_module_handle = GameDllHandle;
-	
+	return 1;
 	// dlsym is already known to be pointing to valid function, we loaded gamedll using it earlier!
 	void * sym_ptr = (void*)&dlsym;
 	while(is_code_trampoline_jmp_opcode(sym_ptr)) {
@@ -202,7 +216,7 @@ int DLLINTERNAL init_linkent_replacement(DLHANDLE MetamodHandle, DLHANDLE GameDl
 	memcpy(dlsym_old_bytes, (void*)dlsym_original, BYTES_SIZE);
 	
 	//Construct new bytes: "jmp offset[replacement_sendto] @ sendto_original"
-	construct_jmp_instruction((void*)&dlsym_new_bytes[0], (void*)dlsym_original, (void*)&__replacement_dlsym);
+	//construct_jmp_instruction((void*)&dlsym_new_bytes[0], (void*)dlsym_original, (void*)&__replacement_dlsym);
 	
 	//Check if bytes overlap page border.	
 	unsigned long start_of_page = PAGE_ALIGN((long)dlsym_original) - PAGE_SIZE;

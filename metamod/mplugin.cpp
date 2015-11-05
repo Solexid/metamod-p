@@ -546,13 +546,13 @@ mBOOL DLLINTERNAL MPlugin::load(PLUG_LOADTIME now) {
 		RETURN_ERRNO(mFALSE, ME_ARGUMENT);
 	}
 	if(status >= PL_RUNNING) {
-		META_WARNING("dll: Not loading plugin '%s'; already loaded (status=%s)", 
-				desc, str_status());
-		RETURN_ERRNO(mFALSE, ME_ALREADY);
+		//META_WARNING("dll: Not loading plugin '%s'; already loaded (status=%s)", 
+		//		desc, str_status());
+		//RETURN_ERRNO(mFALSE, ME_ALREADY);
 	}
 	if(action != PA_LOAD && action != PA_ATTACH && action != PA_RELOAD) {
-		META_WARNING("dll: Not loading plugin '%s'; not marked for load (action=%s)", desc, str_action());
-		RETURN_ERRNO(mFALSE, ME_BADREQ);
+		//META_WARNING("dll: Not loading plugin '%s'; not marked for load (action=%s)", desc, str_action());
+		//RETURN_ERRNO(mFALSE, ME_BADREQ);
 	}
 
 	if(status <= PL_OPENED) {

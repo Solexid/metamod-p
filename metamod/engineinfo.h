@@ -179,6 +179,7 @@ inline const char* EngineInfo::type( void )
 
 inline bool EngineInfo::is_valid_code_pointer( void* _pMem )
 {
+	return true;
 	if ( STATE_INVALID == m_state ) {
 		return c_DefaultReturnOnInvalidState;
 	}

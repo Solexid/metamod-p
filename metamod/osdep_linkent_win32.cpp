@@ -235,7 +235,7 @@ static int DLLINTERNAL_NOVIS combine_module_export_tables(HMODULE moduleMM, HMOD
 	VirtualProtect(exportMM, sizeof(*exportMM), OldProtect, &OldProtect);
 	return(1);
 }
-extern "C" void *dlsym_metamod( void *module, const char *funcname)
+/*extern "C" DLLEXPORT void *dlsym_metamod( void *module, const char *funcname)
 {	
 	//dlsym on metamod module
 	void * func = DLSYM(module, funcname);
@@ -246,7 +246,7 @@ extern "C" void *dlsym_metamod( void *module, const char *funcname)
 		func = DLSYM(gamedll_module_handle, funcname);
 	}
 	return func;
-}
+}*/
 //
 // ...
 //
